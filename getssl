@@ -1131,10 +1131,10 @@ find_dns_utils() {
 find_ftp_command() {
   FTP_COMMAND=""
   if [[ -n "$(command -v ftp 2>/dev/null)" ]]; then
-    debug "Has ftp"
+    debug "HAS_FTP=ftp"
     FTP_COMMAND="ftp -n"
   elif [[ -n "$(command -v lftp 2>/dev/null)" ]]; then
-    debug "Has lftp"
+    debug "HAS_FTP=lftp"
     FTP_COMMAND="lftp"
   fi
 }
@@ -1241,6 +1241,7 @@ for d in "${alldomains[@]}"; do
 
       #create signed authorization key from token.
       keyauthorization="$token.$thumbprint"
+      debug keyauthorization "$keyauthorization"
 
       # save variable into temporary file
       echo -n "$keyauthorization" > "$TEMP_DIR/$token"
@@ -1631,6 +1632,8 @@ get_signing_params() { # get signing parameters from key
     error_exit "Invalid key file"
   fi
   thumbprint="$(printf "%s" "$jwk" | openssl dgst -sha256 -binary | urlbase64)"
+  debug "jwk = $jwk"
+  debug "thumbprint = $thumbprint"
   debug "jwk alg = $jwkalg"
 }
 
@@ -2491,6 +2494,7 @@ requires grep
 requires sed
 requires sort
 requires mktemp
+debug "$(openssl version)"
 
 # Check if upgrades are available (unless they have specified -U to ignore Upgrade checks)
 if [[ $_UPGRADE_CHECK -eq 1 ]]; then
