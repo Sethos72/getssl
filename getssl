@@ -1271,7 +1271,10 @@ for d in "${alldomains[@]}"; do
         fi
       fi
 
+      debug curl output "$(curl --user-agent "$CURL_USERAGENT" -k --silent --location "$wellknown_url")"
+      debug file contents before "$(cat $t_loc/$token)"
       check_challenge_completion "$uri" "$d" "$keyauthorization"
+      debug file contents after "$(cat $t_loc/$token)"
 
       debug "remove token from ${DOMAIN_ACL}"
       IFS=\; read -r -a token_locations <<<"$DOMAIN_ACL"
